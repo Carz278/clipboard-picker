@@ -1,5 +1,5 @@
 #!/bin/bash
-# install.sh - Deploy clipboard-tui to a Caelestia environment
+# install.sh - Deploy clipboard-picker to a Caelestia environment
 # Usage: ./install.sh
 
 set -e

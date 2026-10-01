@@ -1,4 +1,4 @@
-# clipboard-tui
+# clipboard-picker
 
 A lightweight clipboard history manager for [Caelestia](https://github.com/caelestia-dots/caelestia) / Hyprland, built on top of `cliphist` and `fuzzel`.
 
@@ -20,7 +20,7 @@ Caelestia's built-in clipboard (via `caelestia clipboard`) is simple but lacks:
 - A pin feature (like HyDE's favorites)
 - A menu for bulk actions
 
-`clipboard-tui` keeps the same lightweight `cliphist` + `fuzzel` stack, but adds those missing pieces in about 60 lines of bash.
+`clipboard-picker` keeps the same lightweight `cliphist` + `fuzzel` stack, but adds those missing pieces in about 60 lines of bash.
 
 ## Prerequisites
 
@@ -36,8 +36,8 @@ Install on Arch:
 
 ### Quick install
 
-    git clone git@github.com:Carz278/clipboard-tui.git
-    cd clipboard-tui
+    git clone git@github.com:Carz278/clipboard-picker.git
+    cd clipboard-picker
     ./install.sh
 
 Then follow the printed instructions to update `hypr-vars.lua` and `hypr-user.lua`.
