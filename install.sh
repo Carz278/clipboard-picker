@@ -57,7 +57,6 @@ install_system_deps() {
 
 # ==================== Basic checks ====================
 info "Checking basic environment..."
-
 if ! command -v bash &> /dev/null; then
     err "bash not found."
     exit 1
@@ -66,7 +65,6 @@ ok "bash is installed"
 
 # ==================== System dependencies ====================
 info "Checking system dependencies..."
-
 MISSING=()
 for cmd in cliphist wl-copy fuzzel; do
     if ! command -v "$cmd" &> /dev/null; then
@@ -140,21 +138,21 @@ if [ "$CONFLICT_FOUND" = "1" ]; then
     warn "Please resolve the conflict above before using Super+V."
 fi
 
-# ==================== Print binding guide ====================
+# ==================== Print guide ====================
 echo
 echo "============================================"
 echo "  Installation complete"
 echo "============================================"
 echo
-echo -e "${YELLOW}Add this line to ~/.config/caelestia/hypr-user.lua:${NC}"
+echo "Add this line to ~/.config/caelestia/hypr-user.lua:"
 echo
 echo "    hl.bind(\"SUPER + V\", hl.dsp.exec_cmd(\"$HOME/.local/bin/clipboard.sh\"))"
 echo
-echo -e "${YELLOW}Then make sure cliphist is recording:${NC}"
+echo "Then make sure cliphist is recording:"
 echo
 echo "    hl.exec_once(\"wl-paste --watch cliphist store\")"
 echo
 echo "============================================"
-echo -e "${GREEN}Log out and log back in to apply changes.${NC}"
+echo "  Log out and log back in to apply changes."
 echo "============================================"
 echo

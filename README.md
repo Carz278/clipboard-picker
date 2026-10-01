@@ -2,7 +2,7 @@
 
 A lightweight clipboard history manager for [Caelestia](https://github.com/caelestia-dots/caelestia) / Hyprland, built on top of `cliphist` and `fuzzel`.
 
-It adds a **pin (favorite)** feature to the default Caelestia clipboard, plus a quick menu for delete / wipe / show-pinned actions, all from a single `Super + V` keybind.
+It adds a pin (favorite) feature to the default Caelestia clipboard, plus a quick menu for delete / wipe / show-pinned actions, all from a single `Super + V` keybind.
 
 ## Features
 
@@ -10,10 +10,10 @@ It adds a **pin (favorite)** feature to the default Caelestia clipboard, plus a 
 - Top menu for quick actions: `pin`, `delete`, `unpin`, `wipe`, `pinned`
 - Pin (favorite) clipboard entries that survive `cliphist wipe`
 - Fuzzy search through clipboard history (powered by `fuzzel`)
-- Theme-aware: colors follow the current Caelestia scheme (via `fuzzel.ini`)
+- Theme-aware: colors follow the current Caelestia scheme
 - Tiny: single shell script, no Python, no extra daemon
 
-## Why?
+## Why
 
 Caelestia's built-in clipboard (via `caelestia clipboard`) is simple but lacks:
 
@@ -36,76 +36,54 @@ Install on Arch:
 
 ### Quick install
 
-    git clone https://github.com/Carz278/clipboard-tui.git
+    git clone git@github.com:Carz278/clipboard-tui.git
     cd clipboard-tui
     ./install.sh
 
 Then follow the printed instructions to update `hypr-vars.lua` and `hypr-user.lua`.
 
-### Manual installation
+### Manual install
 
-#### 1. Clone this repository
+1. Copy the script:
 
-    git clone https://github.com/Carz278/clipboard-tui.git
-    cd clipboard-tui
+       mkdir -p ~/.local/bin
+       cp clipboard.sh ~/.local/bin/clipboard.sh
+       chmod +x ~/.local/bin/clipboard.sh
 
-#### 2. Copy the script to a stable location
+2. Ensure cliphist is recording. Add to `~/.config/caelestia/hypr-user.lua`:
 
-    mkdir -p ~/.local/bin
-    cp clipboard.sh ~/.local/bin/clipboard.sh
-    chmod +x ~/.local/bin/clipboard.sh
+       hl.exec_once("wl-paste --watch cliphist store")
 
-#### 3. Ensure cliphist is recording clipboard history
+   Or create a systemd user service:
 
-Add to `~/.config/caelestia/hypr-user.lua`:
+       mkdir -p ~/.config/systemd/user
+       cat > ~/.config/systemd/user/cliphist.service <<'SYSEOF'
+       [Unit]
+       Description=Clipboard history watcher
+       After=graphical-session.target
 
-    hl.exec_once("wl-paste --watch cliphist store")
+       [Service]
+       ExecStart=/usr/bin/wl-paste --watch /usr/bin/cliphist store
+       Restart=on-failure
 
-Or create a systemd user service:
+       [Install]
+       WantedBy=default.target
+       SYSEOF
+       systemctl --user daemon-reload
+       systemctl --user enable --now cliphist
 
-    mkdir -p ~/.config/systemd/user
-    cat > ~/.config/systemd/user/cliphist.service <<'SYSEOF'
-    [Unit]
-    Description=Clipboard history watcher
-    After=graphical-session.target
+3. Disable Caelestia's built-in clipboard keybind. Edit `~/.config/caelestia/hypr-vars.lua`:
 
-    [Service]
-    ExecStart=/usr/bin/wl-paste --watch /usr/bin/cliphist store
-    Restart=on-failure
+       return {
+         kbClipboard = "",
+         kbClipboardDel = "",
+       }
 
-    [Install]
-    WantedBy=default.target
-    SYSEOF
-    systemctl --user daemon-reload
-    systemctl --user enable --now cliphist
+4. Bind your own `Super + V`. Edit `~/.config/caelestia/hypr-user.lua`:
 
-#### 4. Disable Caelestia's built-in clipboard keybind
+       hl.bind("SUPER + V", hl.dsp.exec_cmd("~/.local/bin/clipboard.sh"))
 
-Caelestia already binds `Super + V` (and `Super + Alt + V`) to its own clipboard implementation. You MUST disable those first, otherwise both will trigger at the same time.
-
-Edit `~/.config/caelestia/hypr-vars.lua` and empty the clipboard-related keybinds:
-
-    return {
-      -- Disable Caelestia's built-in clipboard shortcuts
-      kbClipboard = "",
-      kbClipboardDel = "",
-
-      -- Keep any existing overrides (e.g. kbTodoWs = "")
-    }
-
-If you have other variables in `hypr-vars.lua`, keep them. Only empty the clipboard ones.
-
-#### 5. Bind your own Super + V
-
-Edit `~/.config/caelestia/hypr-user.lua` and add:
-
-    hl.bind("SUPER + V", hl.dsp.exec_cmd("/home/YOUR_USER/.local/bin/clipboard.sh"))
-
-Replace `YOUR_USER` with your actual username.
-
-#### 6. Log out and log back in
-
-Because `hypr-vars.lua` and `hypr-user.lua` are only read at Hyprland startup.
+5. Log out and log back in.
 
 ## Usage
 
@@ -120,17 +98,17 @@ Press `Super + V` to open the clipboard menu:
     <your clipboard history...>
 
 - Select a history entry: copy it back to clipboard
-- Select `pin`: choose a history entry to pin
-- Select `delete`: choose a history entry to remove
-- Select `unpin`: choose a pinned entry to unpin
-- Select `wipe`: confirm to clear all history (pinned entries are kept in the favorites file)
-- Select `pinned`: choose a pinned entry to copy
+- `pin`: choose a history entry to pin
+- `delete`: choose a history entry to remove
+- `unpin`: choose a pinned entry to unpin
+- `wipe`: clear all history (pinned entries are kept in the favorites file)
+- `pinned`: choose a pinned entry to copy
 
 Press `Super + V` again to close the menu.
 
 ## Files
 
-- `clipboard.sh` - the main script
+- `clipboard.sh` - main script
 - `install.sh` - automated installer
 - `~/.local/share/cliphist/favorites` - pinned entries (one per line)
 
