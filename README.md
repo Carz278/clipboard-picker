@@ -1,5 +1,8 @@
 # clipboard-picker
 
+> **Note**: This project was written with the help of AI. Please review the code before using it in production.
+
+
 A lightweight clipboard history manager for [Caelestia](https://github.com/caelestia-dots/caelestia) / Hyprland, built on top of `cliphist` and `fuzzel`.
 
 It adds a pin (favorite) feature to the default Caelestia clipboard, plus a quick menu for delete / wipe / show-pinned actions, all from a single `Super + V` keybind.
