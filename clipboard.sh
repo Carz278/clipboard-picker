@@ -3,12 +3,18 @@
 # Keybind: Super + V
 
 # ========== Toggle ==========
-if pgrep -f "fuzzel --dmenu --prompt Clipboard" > /dev/null 2>&1; then
-    pkill -f "fuzzel --dmenu --prompt Clipboard"
+LOCK_FILE="/tmp/clipboard-toggle.lock"
+
+# Check if ANY fuzzel process is running
+if pgrep -x fuzzel > /dev/null 2>&1; then
+    pkill -x fuzzel
+    rm -f "$LOCK_FILE"
     exit 0
 fi
 
 # ========== Main ==========
+touch "$LOCK_FILE"
+
 FAV_FILE="$HOME/.local/share/cliphist/favorites"
 mkdir -p "$(dirname "$FAV_FILE")"
 touch "$FAV_FILE"
@@ -26,6 +32,8 @@ build_menu() {
 }
 
 chosen=$(build_menu | fuzzel --dmenu --prompt "Clipboard " --width 60)
+rm -f "$LOCK_FILE"
+
 [ -z "$chosen" ] && exit 0
 
 case "$chosen" in

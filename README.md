@@ -9,7 +9,7 @@ It adds a pin (favorite) feature to the default Caelestia clipboard, plus a quic
 
 ## Features
 
-- Toggle behavior: press `Super + V` to open, press again to close
+- Toggle behavior: press `Super + V` to open, press again to close (works on the main menu and on submenus)
 - Top menu for quick actions: `pin`, `delete`, `unpin`, `wipe`, `pinned`
 - Pin (favorite) clipboard entries that survive `cliphist wipe`
 - Fuzzy search through clipboard history (powered by `fuzzel`)
@@ -108,6 +108,16 @@ Press `Super + V` to open the clipboard menu:
 - `pinned`: choose a pinned entry to copy
 
 Press `Super + V` again to close the menu.
+
+## Toggle behavior
+
+`Super + V` toggles the clipboard menu:
+
+- Press once: the menu opens.
+- Press again: the menu closes.
+- Works on the main menu and on submenus (`pin`, `delete`, etc.).
+
+`Super + Alt + V` toggles the clipboard in delete mode.
 
 ## Files
 
